@@ -17,21 +17,22 @@ function generateGrid() {
   isGameOver = false;
 
   //Dichiaro l'array delle bombe e il numero delle bombe
-  const bombNumber = 16;
+  const bombsNumber = 16;
   const bombs = [];
 
   //Genero numeri casuali da 1 a lunghezza del lato alla seconda e se non sono gia' presenti nell'array delle bombe ce li inserisco finche l'array delle bombe non e' lungo bombNUmber 
-  while (bombs.length < bombNumber) {
+  while (bombs.length < bombsNumber) {
     let bombCellNumber = Math.floor(Math.random() * Math.pow(squareSideLength, 2)) + 1;
     if (bombs.includes(bombCellNumber) == false) {
       bombs.push(bombCellNumber)
     }
   }
+  bombs.sort((a, b) => a - b);
   console.log(bombs)
 
   //Dichiaro punteggio e punteggio massimo
   let score = 0;
-  let maxScore = Math.pow(squareSideLength, 2) - bombNumber;
+  let maxScore = Math.pow(squareSideLength, 2) - bombsNumber;
 
   //Genero un array di caselle cliccate e di caselle gerate
   const cellsArray = [];
@@ -66,6 +67,9 @@ function generateGrid() {
       } else if (clickedCells.includes(num) == true && isGameOver == false) {
         alert(`Hai già cliccato questa casella`)
       }
+      if (score == maxScore) {
+        gameOver(score, maxScore, bombs, cellsArray);
+      }
     });
   }
 }
@@ -73,10 +77,14 @@ function generateGrid() {
 function gameOver(score, maxScore, bombs, cellsArray) {
   isGameOver = true;
   for (let i = 0; i < bombs.length; i++) {
-    let index2 = bombs[i];
+    let index2 = bombs[i] - 1;
     cellsArray[index2].classList.add('bg-danger')
   }
-  alert(`Game Over! Hai raggiunto un totale di ${score} punti su un massimo di ${maxScore}, riprova!`)
+  if (score < maxScore) {
+    alert(`Game Over! Hai raggiunto un totale di ${score} punti su un massimo di ${maxScore}, riprova!`)
+  } else {
+    alert(`Hai vinto! Congratulazioni!`)
+  }
 }
 
 /* CODICE */
