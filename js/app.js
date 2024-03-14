@@ -21,12 +21,19 @@ function generateGrid() {
 
   //Genero numeri casuali da 1 a lunghezza del lato alla seconda e se non sono gia' presenti nell'array delle bombe ce li inserisco finche l'array delle bombe non e' lungo bombNUmber 
   while (bombs.length < bombNumber) {
-    let bombCellNumber = Math.floor(Math.random() * bombNumber) + 1;
+    let bombCellNumber = Math.floor(Math.random() * Math.pow(squareSideLength, 2)) + 1;
     if (bombs.includes(bombCellNumber) == false) {
       bombs.push(bombCellNumber)
     }
   }
   console.log(bombs)
+
+  //Dichiaro punteggio e punteggio massimo
+  let score = 0;
+  let maxScore = Math.pow(squareSideLength, 2) - bombNumber;
+
+  //Genero un array di caselle cliccate
+  const clickedCells = [];
 
   //Genero tutto in base alla dificolta'
   for (let i = 0; i < Math.pow(squareSideLength, 2); i++) {
@@ -45,16 +52,30 @@ function generateGrid() {
 
     //Aggiungo la funzionalita' di cambio colore alle celle
     cellElement.addEventListener('click', function () {
-      if (bombs.includes(num) == true) {
+      if (bombs.includes(num) == true && isGameOver == false) {
         this.classList.toggle('bg-danger')
-      } else
-        this.classList.toggle('bg-primary')
-        console.log(`Hai cliccato la casella ${num}`)
+        gameOver();
+      } else if (clickedCells.includes(num) == false && isGameOver == false) {
+        this.classList.toggle('bg-primary');
+        clickedCells.push(num)
+        score++
+        console.log(`Hai cliccato la casella ${num}. Il tuo punteggio attuale è di ${score}`);
+      } else if (clickedCells.includes(num) == true && isGameOver == false) {
+        alert(`Hai già cliccato questa casella`)
+      }
     });
   }
 }
 
+function gameOver() {
+  isGameOver = true;
+  
+}
+
 /* CODICE */
+
+//Dichiaro la condizione di gioco in corso
+let isGameOver = false;
 
 //dicahiaro il bottone di generazione della griglia
 const playButton = document.querySelector('.start');
