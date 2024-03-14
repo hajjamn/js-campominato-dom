@@ -20,7 +20,7 @@ function generateGrid() {
   const bombs = [];
 
   //Genero numeri casuali da 1 a lunghezza del lato alla seconda e se non sono gia' presenti nell'array delle bombe ce li inserisco finche l'array delle bombe non e' lungo bombNUmber 
-  while (bombs.length < 16) {
+  while (bombs.length < bombNumber) {
     let bombCellNumber = Math.floor(Math.random() * bombNumber) + 1;
     if (bombs.includes(bombCellNumber) == false) {
       bombs.push(bombCellNumber)
@@ -45,8 +45,11 @@ function generateGrid() {
 
     //Aggiungo la funzionalita' di cambio colore alle celle
     cellElement.addEventListener('click', function () {
-      this.classList.toggle('bg-primary')
-      console.log(`Hai cliccato la casella ${num}`)
+      if (bombs.includes(num) == true) {
+        this.classList.toggle('bg-danger')
+      } else
+        this.classList.toggle('bg-primary')
+        console.log(`Hai cliccato la casella ${num}`)
     });
   }
 }
